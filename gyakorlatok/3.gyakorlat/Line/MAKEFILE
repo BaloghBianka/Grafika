@@ -1,0 +1,17 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c11 `sdl2-config --cflags`
+LDFLAGS = `sdl2-config --libs`
+
+all: main
+
+main: main.o line.o
+	$(CC) $(CFLAGS) -o main main.o line.o $(LDFLAGS)
+
+main.o: main.c line.h
+	$(CC) $(CFLAGS) -c main.c
+
+line.o: line.c line.h
+	$(CC) $(CFLAGS) -c line.c
+
+clean:
+	rm -f *.o main
