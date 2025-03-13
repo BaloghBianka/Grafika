@@ -10,7 +10,7 @@
 *.o
 *.obj
 cuboid
-cuboid.exe
+pong
 
 *.log
 *.tmp
