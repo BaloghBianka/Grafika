@@ -71,6 +71,12 @@ void handle_game_events(Game* game)
             SDL_GetMouseState(&x, &y);
             set_right_pad_position(&(game->pong), y);
             break;
+        case SDL_MOUSEBUTTONDOWN:
+            if(event.button.button == SDL_BUTTON_LEFT){
+                game->pong.ball.x = event.button.x;
+                game->pong.ball.y = event.button.y; 
+            }
+            break;
         case SDL_QUIT:
             game->is_running = false;
             break;
