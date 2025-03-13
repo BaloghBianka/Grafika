@@ -46,14 +46,25 @@ void set_right_pad_speed(Pong* pong, float speed)
 
 void bounce_ball(Pong* pong)
 {
-    if (pong->ball.x - pong->ball.radius < 50) {
-        pong->ball.x = pong->ball.radius + 50;
-        pong->ball.speed_x *= -1;
+    //pong->ball.x - pong->ball.radius: a labda bal széle
+    //pong->left_pad.x + pong->left_pad.width: az ütő jobb széle
+   if (pong->ball.x - pong->ball.radius < pong->left_pad.x + pong->left_pad.width) {
+        //pong->ball.y: a labda középpontjának y-koordinátája
+        //pong->left_pad.y: az ütő teteje
+        //pong->left_pad.y + pong->left_pad.height: az ütő alja
+        if (pong->ball.y > pong->left_pad.y && pong->ball.y < pong->left_pad.y + pong->left_pad.height) {
+            pong->ball.x = pong->left_pad.x + pong->left_pad.width + pong->ball.radius;
+            pong->ball.speed_x *= -1;
+        }
     }
-    if (pong->ball.x + pong->ball.radius > pong->width - 50) {
-        pong->ball.x = pong->width - pong->ball.radius - 50;
-        pong->ball.speed_x *= -1;
+
+    if (pong->ball.x + pong->ball.radius > pong->right_pad.x) {
+        if (pong->ball.y > pong->right_pad.y && pong->ball.y < pong->right_pad.y + pong->right_pad.height) {
+            pong->ball.x = pong->right_pad.x - pong->ball.radius;
+            pong->ball.speed_x *= -1;
+        }
     }
+
     if (pong->ball.y - pong->ball.radius < 0) {
         pong->ball.y = pong->ball.radius;
         pong->ball.speed_y *= -1;
