@@ -56,6 +56,8 @@ void bounce_ball(Pong* pong)
             pong->ball.x = pong->left_pad.x + pong->left_pad.width + pong->ball.radius;
             pong->ball.speed_x *= -1;
         }
+        pong->ball.rotation_speed += pong->left_pad.speed * 0.5;
+
     }
 
     if (pong->ball.x + pong->ball.radius > pong->right_pad.x) {
@@ -63,14 +65,18 @@ void bounce_ball(Pong* pong)
             pong->ball.x = pong->right_pad.x - pong->ball.radius;
             pong->ball.speed_x *= -1;
         }
+        pong->ball.rotation_speed += pong->right_pad.speed * 0.5;
+
     }
 
     if (pong->ball.y - pong->ball.radius < 0) {
         pong->ball.y = pong->ball.radius;
         pong->ball.speed_y *= -1;
+        pong->ball.rotation_speed *= -1;
     }
     if (pong->ball.y + pong->ball.radius > pong->height) {
         pong->ball.y = pong->height - pong->ball.radius;
         pong->ball.speed_y *= -1;
+        pong->ball.rotation_speed *= -1;
     }
 }
