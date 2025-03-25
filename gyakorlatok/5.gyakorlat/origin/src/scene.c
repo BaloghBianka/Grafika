@@ -5,11 +5,18 @@
 
 void init_scene(Scene* scene)
 {
+    scene->rotation_angle = 0;
 }
 
 void update_scene(Scene* scene)
 {
+    scene->rotation_angle += 0.05;
+    if (scene->rotation_angle > 360) {
+        scene->rotation_angle -= 360;
+    }
 }
+
+
 
 void render_scene(const Scene* scene)
 {
@@ -42,9 +49,17 @@ glColor3f(1, 0, 1);
 glVertex3f(0.5, 0.75, 0.5);
 
 glEnd(); */
+glPushMatrix();
+glTranslatef(0.5, 0.5, 0.5);              
+glRotatef(scene->rotation_angle, 0, 1, 0);   
+glTranslatef(-0.5, -0.5, -0.5);           
+draw_sphere(0.3, 6, 6);                     
+glPopMatrix();
 
-draw_sphere(0.3, 20, 20);
-}
+
+
+/* draw_sphere(0.3, 6, 6);
+ */}
 
 void draw_origin()
 {
@@ -77,19 +92,17 @@ void draw_sphere(float radius, int slices, int stacks)
         float phi2 = pi * (i + 1) / stacks;
 
         glBegin(GL_TRIANGLE_STRIP);
-        glColor3f(0.5, 0.5, 0.5); // szürke
+        glColor3f(0.5, 0.5, 0.5); 
 
         for (int j = 0; j <= slices; ++j)
         {
             float theta = 2 * pi * j / slices;
 
-            // Első gyűrű pontja
             x = radius * sin(phi1) * cos(theta);
             y = radius * cos(phi1);
             z = radius * sin(phi1) * sin(theta);
-            glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f); // középre mozgatva
+            glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f); 
 
-            // Második gyűrű pontja
             x = radius * sin(phi2) * cos(theta);
             y = radius * cos(phi2);
             z = radius * sin(phi2) * sin(theta);
