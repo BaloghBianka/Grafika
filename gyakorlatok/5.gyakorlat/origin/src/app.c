@@ -136,6 +136,12 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_E:
                 set_camera_vertical_speed(&(app->camera), -1);
                 break;
+            case SDL_SCANCODE_J:
+                set_camera_rotation_speed(&(app->camera), 1);
+                break;
+            case SDL_SCANCODE_L:
+                set_camera_rotation_speed(&(app->camera), -1);
+                break;
             default:
                 break;
             }
@@ -154,6 +160,10 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_Q:
             case SDL_SCANCODE_E:
                 set_camera_vertical_speed(&(app->camera), 0);
+                break;
+            case SDL_SCANCODE_J:
+            case SDL_SCANCODE_L:
+                set_camera_rotation_speed(&(app->camera), 0);
                 break;
             default:
                 break;
