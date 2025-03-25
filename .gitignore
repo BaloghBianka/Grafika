@@ -9,8 +9,12 @@
 *.out
 *.o
 *.obj
+main
 cuboid
 pong
+matrix
+line
+origin
 
 *.log
 *.tmp
