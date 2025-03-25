@@ -15,6 +15,7 @@ void init_camera(Camera *camera)
     camera->speed.x = 0.0;
     camera->speed.y = 0.0;
     camera->speed.z = 0.0;
+    camera->rotation_speed_z = 0.0;
 }
 
 void update_camera(Camera *camera, double time)
@@ -31,7 +32,7 @@ void update_camera(Camera *camera, double time)
     camera->position.y += sin(side_angle) * camera->speed.x * time;
     camera->position.z += camera->speed.z * time;
 
-    camera->rotation.z += camera->speed.z * time;
+    camera->rotation.z += camera->rotation_speed_z * time;
 }
 
 void set_view(const Camera *camera)
@@ -85,7 +86,8 @@ void set_camera_vertical_speed(Camera *camera, double speed)
     camera->speed.z = speed;
 }
 
-void set_camera_rotation_speed(Camera *camera, double speed)
+void set_camera_rotation_speed(Camera* camera, double speed)
 {
-    camera->speed.z = speed;
+    camera->rotation_speed_z = speed;
 }
+

@@ -137,10 +137,10 @@ void handle_app_events(App *app)
                 set_camera_vertical_speed(&(app->camera), -1);
                 break;
             case SDL_SCANCODE_J:
-                set_camera_rotation_speed(&(app->camera), 1);
+                set_camera_rotation_speed(&(app->camera), 30);
                 break;
             case SDL_SCANCODE_L:
-                set_camera_rotation_speed(&(app->camera), -1);
+                set_camera_rotation_speed(&(app->camera), -30);
                 break;
             default:
                 break;

@@ -10,9 +10,10 @@
  */
 typedef struct Camera
 {
-    vec3 position;
+    vec3 position;   //vec3 ->x,y,z tengely
     vec3 rotation;
     vec3 speed;
+    double rotation_speed_z;  // double -> csak z irány
 } Camera;
 
 /**
