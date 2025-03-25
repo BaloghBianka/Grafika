@@ -26,5 +26,6 @@ void render_scene(const Scene* scene);
  * Draw the origin of the world coordinate system.
  */
 void draw_origin();
+void draw_sphere(float radius, int slices, int stacks);
 
 #endif /* SCENE_H */
