@@ -15,6 +15,7 @@ pong
 matrix
 line
 origin
+cube
 
 *.log
 *.tmp

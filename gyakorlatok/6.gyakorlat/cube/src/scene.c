@@ -76,7 +76,15 @@ void render_scene(const Scene* scene)
     set_material(&(scene->material));
     set_lighting();
     draw_origin();
-    draw_model(&(scene->cube));
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            glPushMatrix();
+            glTranslatef(i * 5.0f, 0.0f, j * 5.0f); 
+            draw_model(&(scene->cube));
+            glPopMatrix();
+        }
+    }
 }
 
 void draw_origin()
