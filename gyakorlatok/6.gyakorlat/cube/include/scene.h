@@ -9,8 +9,15 @@
 typedef struct Scene
 {
     Model cube;
+    Model cat;
+    Model deer;
+    Model porsche;
     Material material;
     GLuint texture_id;
+    float rotation;
+    float move_x;  
+    float move_y;  
+    float move_z; 
 } Scene;
 
 /**

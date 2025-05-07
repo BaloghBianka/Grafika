@@ -7,7 +7,8 @@ void init_scene(Scene* scene)
 {
     // load_model(&(scene->cube), "assets/models/cube.obj");
     // scene->texture_id = load_texture("assets/textures/cube.png");
-    load_model(&(scene->cube), "assets/models/cat.obj");
+    load_model(&(scene->cube), "assets/models/deer.obj");
+    load_model(&(scene->cube), "assets/models/porsche.obj");
     scene->texture_id = load_texture("assets/textures/cube.png");
 
     glBindTexture(GL_TEXTURE_2D, scene->texture_id);
@@ -25,6 +26,10 @@ void init_scene(Scene* scene)
     scene->material.specular.blue = 0.0;
 
     scene->material.shininess = 0.0;
+
+    scene->move_x = 0.0f;
+    scene->move_y = 0.0f;
+    scene->move_z = 0.0f;
 }
 
 void set_lighting()
@@ -85,6 +90,11 @@ void render_scene(const Scene* scene)
             glPopMatrix();
         }
     }
+
+    glPushMatrix();
+    glTranslatef(scene->move_x, scene->move_y, scene->move_z);
+    glRotatef(scene->rotation, 0.0f, 1.0f, 0.0f);
+    glPopMatrix();
 }
 
 void draw_origin()

@@ -1,6 +1,8 @@
 #include "app.h"
-
+#include <stdio.h>
 #include <SDL2/SDL_image.h>
+
+Scene* scene;
 
 void init_app(App* app, int width, int height)
 {
@@ -42,6 +44,8 @@ void init_app(App* app, int width, int height)
 
     init_camera(&(app->camera));
     init_scene(&(app->scene));
+
+    scene = &(app->scene);
 
     app->is_running = true;
 }
@@ -124,6 +128,12 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), -1);
+                break;
+            case SDLK_q:
+                scene->move_y += 0.5f;
+                break;
+            case SDLK_e:
+                scene->move_y -= 0.5f;
                 break;
             default:
                 break;
