@@ -27,9 +27,9 @@ void init_scene(Scene* scene)
 
     scene->material.shininess = 0.0;
 
-    scene->move_x = 0.0f;
-    scene->move_y = 0.0f;
-    scene->move_z = 0.0f;
+    scene->position_x = 0.0f;
+    scene->position_y = 0.0f;
+    scene->position_z = -5.0f;
 }
 
 void set_lighting()
@@ -82,18 +82,11 @@ void render_scene(const Scene* scene)
     set_lighting();
     draw_origin();
 
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            glPushMatrix();
-            glTranslatef(i * 5.0f, 0.0f, j * 5.0f); 
-            draw_model(&(scene->cube));
-            glPopMatrix();
-        }
-    }
-
     glPushMatrix();
-    glTranslatef(scene->move_x, scene->move_y, scene->move_z);
-    glRotatef(scene->rotation, 0.0f, 1.0f, 0.0f);
+    
+    glTranslatef(scene->position_x, scene->position_y, scene->position_z);
+    glRotatef(scene->rotation_y, 0.0f, 1.0f, 0.0f);
+    draw_model(&(scene->cube));
     glPopMatrix();
 }
 
