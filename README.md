@@ -1,4 +1,4 @@
-""# Abandoned Amusement Park - OpenGL Application
+# Abandoned Amusement Park - OpenGL Application
 
 ---
 
@@ -71,13 +71,6 @@ To compile and run the program:
 
 ```bash
 make
-./vidampark
+./amusementPark
 ```
 
----
-
----
-
----
-
----
