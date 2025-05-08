@@ -42,10 +42,10 @@ The 3D models are created using Blender and rendered with OpenGL technology. The
 
 ---
 
-##  \*\*Additional Features \*\*
+## Additional Features
 
 1. **Fog** -Fog effect for a mysterious atmosphere.
-2. **Shadows ** -Simulation of water and reflections.
+2. **Shadows** -Simulation of water and reflections.
 3. **Particle System** – Rain animation at game startup.
 
 ---
