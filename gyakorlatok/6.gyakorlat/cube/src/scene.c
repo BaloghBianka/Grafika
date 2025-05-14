@@ -7,8 +7,10 @@ void init_scene(Scene* scene)
 {
     // load_model(&(scene->cube), "assets/models/cube.obj");
     // scene->texture_id = load_texture("assets/textures/cube.png");
-    load_model(&(scene->cube), "assets/models/deer.obj");
-    load_model(&(scene->cube), "assets/models/porsche.obj");
+    load_model(&(scene->cube), "assets/models/cube.obj");
+    scene->texture_id = load_texture("assets/textures/cube.png");
+
+    load_model(&(scene->house), "assets/models/house.obj");
     scene->texture_id = load_texture("assets/textures/cube.png");
 
     glBindTexture(GL_TEXTURE_2D, scene->texture_id);
@@ -87,6 +89,7 @@ void render_scene(const Scene* scene)
     glTranslatef(scene->position_x, scene->position_y, scene->position_z);
     glRotatef(scene->rotation_y, 0.0f, 1.0f, 0.0f);
     draw_model(&(scene->cube));
+    draw_model(&(scene->house));
     glPopMatrix();
 }
 

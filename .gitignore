@@ -16,6 +16,7 @@ matrix
 line
 origin
 cube
+amusementPark
 
 *.log
 *.tmp
