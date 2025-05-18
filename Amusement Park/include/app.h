@@ -21,6 +21,7 @@ typedef struct App
     double uptime;
     Camera camera;
     Scene scene;
+    float light_intensity_change;
 } App;
 
 /**

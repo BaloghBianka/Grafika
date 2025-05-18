@@ -5,6 +5,9 @@
 
 typedef struct Scene
 {
+    float light_intensity;
+    float sky_color[3];   
+    float transition_speed;
 } Scene;
 
 /**
@@ -15,7 +18,7 @@ void init_scene(Scene* scene);
 /**
  * Update the scene.
  */
-void update_scene(Scene* scene);
+void update_scene(Scene* scene, double elapsed_time);
 
 /**
  * Render the scene objects.

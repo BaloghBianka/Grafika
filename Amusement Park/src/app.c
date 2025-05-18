@@ -126,6 +126,28 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_E:
                 set_camera_vertical_speed(&(app->camera), -1);
                 break;
+                case SDL_SCANCODE_KP_PLUS:
+                app->scene.light_intensity += app->light_intensity_change;
+                if (app->scene.light_intensity > 1.0f)
+                    app->scene.light_intensity = 1.0f;
+                glClearColor(
+                    app->scene.light_intensity * 0.53,
+                    app->scene.light_intensity * 0.81,
+                    app->scene.light_intensity * 0.98,
+                    1.0
+                );
+                break;
+            case SDL_SCANCODE_KP_MINUS:
+                app->scene.light_intensity -= app->light_intensity_change;
+                if (app->scene.light_intensity < 0.0f)
+                    app->scene.light_intensity = 0.0f;
+                glClearColor(
+                    app->scene.light_intensity * 0.53,
+                    app->scene.light_intensity * 0.81,
+                    app->scene.light_intensity * 0.98,
+                    1.0
+                );
+                break;
             default:
                 break;
             }
@@ -181,16 +203,16 @@ void update_app(App* app)
     app->uptime = current_time;
 
     update_camera(&(app->camera), elapsed_time);
-    update_scene(&(app->scene));
+    update_scene(&(app->scene), elapsed_time);
 }
 
 void render_app(App* app)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
-
     glPushMatrix();
     set_view(&(app->camera));
+    set_lighting(&(app->camera));
     render_scene(&(app->scene));
     glPopMatrix();
 
