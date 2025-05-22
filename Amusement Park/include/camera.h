@@ -13,6 +13,10 @@ typedef struct Camera
     vec3 position;
     vec3 rotation;
     vec3 speed;
+    vec3 direction;
+    bool is_preview_visible;
+    bool locked;
+    
 } Camera;
 
 /**
@@ -23,7 +27,11 @@ void init_camera(Camera* camera);
 /**
  * Update the position of the camera.
  */
-void update_camera(Camera* camera, double time);
+void update_camera(Camera* camera, double time, double carousel_rotation, vec3 carousel_position);
+
+void calculate_camera_rotation(Camera* camera, vec3 direction);
+
+void lock_camera(Camera* camera, bool lock);
 
 /**
  * Apply the camera settings to the view transformation.
@@ -46,5 +54,6 @@ void set_camera_speed(Camera* camera, double speed);
 void set_camera_side_speed(Camera* camera, double speed);
 
 void set_camera_vertical_speed(Camera* camera, double speed);
+
 
 #endif /* CAMERA_H */

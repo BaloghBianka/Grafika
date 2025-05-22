@@ -5,9 +5,7 @@
 #include "scene.h"
 
 #include <SDL2/SDL.h>
-
-#include <GL/gl.h>
-
+#include <SDL2/SDL_mixer.h>
 #include <stdbool.h>
 
 #define VIEWPORT_RATIO (4.0 / 3.0)
@@ -17,11 +15,15 @@ typedef struct App
 {
     SDL_Window* window;
     SDL_GLContext gl_context;
+    GLuint particle_texture;
     bool is_running;
     double uptime;
     Camera camera;
     Scene scene;
     float light_intensity_change;
+    double fog_end_time;
+    float fog_end_distance;
+    bool  fog_active;
 } App;
 
 /**
@@ -58,5 +60,6 @@ void render_app(App* app);
  * Destroy the application.
  */
 void destroy_app(App* app);
+
 
 #endif /* APP_H */

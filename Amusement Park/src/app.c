@@ -1,5 +1,5 @@
 #include "app.h"
-
+#include <stdio.h>
 #include <SDL2/SDL_image.h>
 
 void init_app(App* app, int width, int height)
@@ -16,10 +16,11 @@ void init_app(App* app, int width, int height)
     }
 
     app->window = SDL_CreateWindow(
-        "Origin!",
+        "amusement park",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
-        SDL_WINDOW_OPENGL);
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+    );
     if (app->window == NULL) {
         printf("[ERROR] Unable to create the application window!\n");
         return;
@@ -44,53 +45,65 @@ void init_app(App* app, int width, int height)
     init_scene(&(app->scene));
 
     app->is_running = true;
+
+    app->light_intensity_change = 0.1f;
+
+    app->fog_end_distance = 30.0f;
+    app->fog_active = true;
+    app->fog_end_time = (double)SDL_GetTicks() / 1000 + 7.0; 
 }
+
 
 void init_opengl()
 {
     glShadeModel(GL_SMOOTH);
 
+    glEnable(GL_NORMALIZE);       // <- EZ AZ ÚJ SOR
+    glEnable(GL_AUTO_NORMAL); 
+
     glEnable(GL_NORMALIZE);
     glEnable(GL_AUTO_NORMAL);
-
-    glClearColor(0.1, 0.1, 0.1, 1.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     glEnable(GL_DEPTH_TEST);
-
     glClearDepth(1.0);
+
+    glEnable(GL_TEXTURE_2D);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    glEnable(GL_FOG);
+    float fog_color[] = {0.95f, 0.95f, 0.95f, 1.0f};
+    glFogfv(GL_FOG_COLOR, fog_color);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogf(GL_FOG_START, 5.0f);
+    glFogf(GL_FOG_END, 30.0f); 
 }
+
 
 void reshape(GLsizei width, GLsizei height)
 {
-    int x, y, w, h;
-    double ratio;
-
-    ratio = (double)width / height;
-    if (ratio > VIEWPORT_RATIO) {
-        w = (int)((double)height * VIEWPORT_RATIO);
-        h = height;
-        x = (width - w) / 2;
-        y = 0;
-    }
-    else {
-        w = width;
-        h = (int)((double)width / VIEWPORT_RATIO);
-        x = 0;
-        y = (height - h) / 2;
+    if (height == 0) {
+        height = 1;
     }
 
-    glViewport(x, y, w, h);
+    double ratio = (double)width / height;
+
+    glViewport(0, 0, width, height);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+
     glFrustum(
-        -.08, .08,
-        -.06, .06,
-        .1, 10
+        -0.08 * ratio, 0.08 * ratio,  // left, right
+        -0.06, 0.06,                  // bottom, top
+        0.1, 10000.0                  // near, far
     );
 }
+
 
 void handle_app_events(App* app)
 {
@@ -109,49 +122,65 @@ void handle_app_events(App* app)
                 app->is_running = false;
                 break;
             case SDL_SCANCODE_W:
-                set_camera_speed(&(app->camera), 1);
+                set_camera_speed(&(app->camera), 5);
                 break;
             case SDL_SCANCODE_S:
-                set_camera_speed(&(app->camera), -1);
+                set_camera_speed(&(app->camera), -5);
                 break;
             case SDL_SCANCODE_A:
-                set_camera_side_speed(&(app->camera), 1);
+                set_camera_side_speed(&(app->camera), 5);
                 break;
             case SDL_SCANCODE_D:
-                set_camera_side_speed(&(app->camera), -1);
+                set_camera_side_speed(&(app->camera), -5);
                 break;
             case SDL_SCANCODE_Q:
-                set_camera_vertical_speed(&(app->camera), 1);
+                set_camera_vertical_speed(&(app->camera), 5);
                 break;
             case SDL_SCANCODE_E:
-                set_camera_vertical_speed(&(app->camera), -1);
+                set_camera_vertical_speed(&(app->camera), -5);
+                break;
+            case SDL_SCANCODE_T:
+                app->camera.locked = !app->camera.locked;
+                break;
+            case SDL_SCANCODE_F1:
+                app->scene.display_help = !(app->scene.display_help);
                 break;
                 case SDL_SCANCODE_KP_PLUS:
                 app->scene.light_intensity += app->light_intensity_change;
                 if (app->scene.light_intensity > 1.0f)
                     app->scene.light_intensity = 1.0f;
-                glClearColor(
-                    app->scene.light_intensity * 0.53,
-                    app->scene.light_intensity * 0.81,
-                    app->scene.light_intensity * 0.98,
-                    1.0
-                );
+            
+                {
+                    GLfloat diffuse[] = {
+                        app->scene.light_intensity,
+                        app->scene.light_intensity,
+                        app->scene.light_intensity,
+                        1.0f
+                    };
+                    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+                }
                 break;
+            
             case SDL_SCANCODE_KP_MINUS:
                 app->scene.light_intensity -= app->light_intensity_change;
                 if (app->scene.light_intensity < 0.0f)
                     app->scene.light_intensity = 0.0f;
-                glClearColor(
-                    app->scene.light_intensity * 0.53,
-                    app->scene.light_intensity * 0.81,
-                    app->scene.light_intensity * 0.98,
-                    1.0
-                );
+            
+                {
+                    GLfloat diffuse[] = {
+                        app->scene.light_intensity,
+                        app->scene.light_intensity,
+                        app->scene.light_intensity,
+                        1.0f
+                    };
+                    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+                }
                 break;
             default:
                 break;
             }
             break;
+
         case SDL_KEYUP:
             switch (event.key.keysym.scancode) {
             case SDL_SCANCODE_W:
@@ -170,9 +199,11 @@ void handle_app_events(App* app)
                 break;
             }
             break;
+
         case SDL_MOUSEBUTTONDOWN:
             is_mouse_down = true;
             break;
+
         case SDL_MOUSEMOTION:
             SDL_GetMouseState(&x, &y);
             if (is_mouse_down) {
@@ -181,17 +212,27 @@ void handle_app_events(App* app)
             mouse_x = x;
             mouse_y = y;
             break;
+
         case SDL_MOUSEBUTTONUP:
             is_mouse_down = false;
             break;
+
+        case SDL_WINDOWEVENT:
+            if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                reshape(event.window.data1, event.window.data2);
+            }
+            break;
+
         case SDL_QUIT:
             app->is_running = false;
             break;
+
         default:
             break;
         }
     }
 }
+
 
 void update_app(App* app)
 {
@@ -202,22 +243,43 @@ void update_app(App* app)
     elapsed_time = current_time - app->uptime;
     app->uptime = current_time;
 
-    update_camera(&(app->camera), elapsed_time);
+    if (app->fog_active) {
+        float t = (app->fog_end_time - current_time);
+        if (t <= 0.0f) {
+            glDisable(GL_FOG);
+            app->fog_active = false;
+            app->scene.fog_active = false;  
+        } else {
+            float progress = 1.0f - (t / 7.0f); 
+            if (progress < 0.0f) progress = 0.0f;
+            if (progress > 1.0f) progress = 1.0f;
+
+            app->fog_end_distance = 30.0f + progress * (100.0f - 30.0f);
+            glFogf(GL_FOG_END, app->fog_end_distance);
+        }
+    }
+
+    vec3 carousel_position = app->scene.carousel_position;
+    double carousel_rotation = app->scene.carousel_rotation;
+
+    update_camera(&(app->camera), elapsed_time, carousel_rotation, carousel_position);
     update_scene(&(app->scene), elapsed_time);
 }
+
 
 void render_app(App* app)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
+
     glPushMatrix();
     set_view(&(app->camera));
-    set_lighting(&(app->camera));
     render_scene(&(app->scene));
     glPopMatrix();
 
     SDL_GL_SwapWindow(app->window);
 }
+
 
 void destroy_app(App* app)
 {
@@ -230,4 +292,4 @@ void destroy_app(App* app)
     }
 
     SDL_Quit();
-}
+} 
