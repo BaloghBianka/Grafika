@@ -56,10 +56,7 @@ void init_app(App* app, int width, int height)
 
 void init_opengl()
 {
-    glShadeModel(GL_SMOOTH);
-
-    glEnable(GL_NORMALIZE);       // <- EZ AZ ÚJ SOR
-    glEnable(GL_AUTO_NORMAL); 
+    glShadeModel(GL_SMOOTH); 
 
     glEnable(GL_NORMALIZE);
     glEnable(GL_AUTO_NORMAL);
